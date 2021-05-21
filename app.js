@@ -7,11 +7,20 @@ app.use(express.json());
 const playlists = [
   {
     id: 1,
-    nome: "Pink Floyd",
+    nome: "Pink Floyd", 
+    musicas: [{
+      id: 1,
+      nome: "teste_01",
+      musica: "x.mp3",
+    }]
   },
   {
     id: 2,
     nome: "Pinduca",
+  },
+  {
+    id: 3,
+    nome: "Ze_vaqueiro",
   },
 ];
 
@@ -42,26 +51,26 @@ const musicas = [
 ];
 
 app.get("/playlists", (req, res) => {
+  // 01 listar Playlists
   //atendendo uma chamada requisiçao http://localhost:3001/playlists
   return res.json(playlists); //
 });
 
-app.post("/playlists", (req, res) => {
-  //atualizando uma playlist - incluindo
-  //inserçao de uma nova playlist
+app.get("/playlists/:id", (req, res) => {
+  //02 busca de playlist pelo id
+  const u = playlists.find((p) => p.id == req.params.id);
+  return res.json(u);
+});
+
+app.post("/usuarios", (req, res) => {
+  //03 inserçao de um novo usuario
   const p = req.body;
-  playlists.push(p);
+  usuarios.push(p);
   return res.json(p);
 });
 
-app.delete("/playlists/:id", (req, res) => {
-  //excluindo uma playlist pelo id
-  const id = playlists.indexOf((p) => p.id == req.params.id);
-  playlists.splice(id, 1);
-  return res.json({});
-});
-
 app.get("/usuarios", (req, res) => {
+  //04 buscar usuario pelo email
   /// busca get, quando incluo o parametro retorna o especifico, sem parametro..retorna a lista - http://localhost:3001/usuarios?email=d@teste.com
   const u = usuarios.find((p) => p.email == req.query.email); // buscando usuario pelo email
   if (u) {
@@ -72,22 +81,53 @@ app.get("/usuarios", (req, res) => {
 });
 
 app.get("/usuarios/:id", (req, res) => {
-  //busca de usuario pelo id
+  // 05 busca de usuario pelo id
   const u = usuarios.find((p) => p.id == req.params.id);
   return res.json(u);
 });
 
-app.get("/playlists/:id", (req, res) => {
-  //busca de playlist pelo id
-  const u = playlists.find((p) => p.id == req.params.id);
-  return res.json(u);
+app.put("/usuarios/:id", (req, res) => {
+  //06 Atualizar usuario
+  const updated = {
+    // defininando novos valores
+    id: req.body.id,
+    nome: req.body.nome,
+    email: req.body.email,
+  };
+  const idupdate = usuarios.findIndex((p) => {
+    // encontrando o id do usuario que sera alterado
+    console.log(p.id);
+    return p.id + "" == req.params.id;
+  });
+  usuarios.splice(idupdate, 1, updated); // subsitituindo o localizado pelo alterado
+  return res.json(usuarios);
 });
 
-app.post("/usuarios", (req, res) => {
-  //inserçao de um novo usuario
+app.post("/playlists", (req, res) => {
+  //07 cadastrar nova Playlist
+  //atualizando uma playlist - incluindo
+  //inserçao de uma nova playlist
   const p = req.body;
-  usuarios.push(p);
+  playlists.push(p);
   return res.json(p);
+});
+
+app.get("/musicas", (req, res) => {
+  //08 - Buscar por nome da musica
+  /// busca get, quando incluo o parametro retorna o especifico, sem parametro..retorna a lista - http://localhost:3001/usuarios?musica=y.mp3
+  const u = musicas.find((p) => p.musica == req.query.musica);
+  if (u) {
+    return res.json(u);
+  } else {
+    return res.json(musicas);
+  }
+});
+
+app.delete("/playlists/:id", (req, res) => {
+  //excluindo uma playlist pelo id
+  const id = playlists.indexOf((p) => p.id == req.params.id);
+  playlists.splice(id, 1);
+  return res.json({});
 });
 
 app.post("/musicas", (req, res) => {
@@ -102,33 +142,6 @@ app.delete("/musicas/:id", (req, res) => {
   const id = musicas.indexOf((p) => p.id == req.params.id);
   musicas.splice(id, 1);
   return res.json({});
-});
-
-app.get("/musicas", (req, res) => {
-  /// busca get, quando incluo o parametro retorna o especifico, sem parametro..retorna a lista - http://localhost:3001/usuarios?musica=y.mp3
-  const u = musicas.find((p) => p.musica == req.query.musica);
-  if (u) {
-    return res.json(u);
-  } else {
-    return res.json(musicas);
-  }
-});
-
-app.put("/usuarios/:id", (req, res) => {
-  const updated = {
-    // defininando novos valores
-    id: req.body.id,
-    nome: req.body.nome,
-    email: req.body.email,
-  };
-  const idupdate = usuarios.findIndex((p) => {     // encontrando o id do usuario que sera alterado
-    console.log(p.id);
-    return (p.id + "") == req.params.id
-
-  });
-
-  usuarios.splice(idupdate, 1, updated); // subsitituindo o localizado pelo alterado
-  return res.json(usuarios);
 });
 
 app.listen(port, () => {
