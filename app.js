@@ -63,7 +63,7 @@ app.delete("/playlists/:id", (req, res) => {
 
 app.get("/usuarios", (req, res) => {
   /// busca get, quando incluo o parametro retorna o especifico, sem parametro..retorna a lista - http://localhost:3001/usuarios?email=d@teste.com
-  const u = usuarios.find((p) => p.email == req.query.email);
+  const u = usuarios.find((p) => p.email == req.query.email); // buscando usuario pelo email
   if (u) {
     return res.json(u);
   } else {
@@ -78,7 +78,7 @@ app.get("/usuarios/:id", (req, res) => {
 });
 
 app.get("/playlists/:id", (req, res) => {
-  //busca de usuario pelo id
+  //busca de playlist pelo id
   const u = playlists.find((p) => p.id == req.params.id);
   return res.json(u);
 });
@@ -113,7 +113,24 @@ app.get("/musicas", (req, res) => {
     return res.json(musicas);
   }
 });
-//testes
+
+app.put("/usuarios/:id", (req, res) => {
+  const updated = {
+    // defininando novos valores
+    id: req.body.id,
+    nome: req.body.nome,
+    email: req.body.email,
+  };
+  const idupdate = usuarios.findIndex((p) => {     // encontrando o id do usuario que sera alterado
+    console.log(p.id);
+    return (p.id + "") == req.params.id
+
+  });
+
+  usuarios.splice(idupdate, 1, updated); // subsitituindo o localizado pelo alterado
+  return res.json(usuarios);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
