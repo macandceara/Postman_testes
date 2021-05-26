@@ -123,6 +123,7 @@ app.get("/musicas", (req, res) => {
   }
 });
 
+
 app.delete("/playlists/:id", (req, res) => {
   //excluindo uma playlist pelo id
   const id = playlists.indexOf((p) => p.id == req.params.id);
