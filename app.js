@@ -1,41 +1,12 @@
 const express = require("express");
 const app = express();
 const port = 3001;
-
+//const usuarios  = require('./usuarios.json');
+//const playlists  = require('./playlists.json');
+const db = require("./db");
 app.use(express.json());
 
-const playlists = [
-  {
-    id: 1,
-    nome: "Pink Floyd", 
-    musicas: [{
-      id: 1,
-      nome: "teste_01",
-      musica: "x.mp3",
-    }]
-  },
-  {
-    id: 2,
-    nome: "Pinduca",
-  },
-  {
-    id: 3,
-    nome: "Ze_vaqueiro",
-  },
-];
 
-const usuarios = [
-  {
-    id: 1,
-    nome: "daniel_macedo",
-    email: "d@teste.com",
-  },
-  {
-    id: 2,
-    nome: "germano",
-    email: "g@teste.com",
-  },
-];
 
 const musicas = [
   {
@@ -50,11 +21,17 @@ const musicas = [
   },
 ];
 
-app.get("/playlists", (req, res) => {
-  // 01 listar Playlists
-  //atendendo uma chamada requisiçao http://localhost:3001/playlists
-  return res.json(playlists); //
+app.get("/playlists", async (req, res) => {
+  const playlists = await db.listarplaylists();
+  return res.json(playlists);
 });
+
+app.get("/usuarios", async (req, res) => {
+const usuarios = await db.listarusuarios();;
+ return res.json(usuarios);
+});
+
+
 
 app.get("/playlists/:id", (req, res) => {
   //02 busca de playlist pelo id
@@ -94,6 +71,7 @@ app.put("/usuarios/:id", (req, res) => {
     nome: req.body.nome,
     email: req.body.email,
   };
+
   const idupdate = usuarios.findIndex((p) => {
     // encontrando o id do usuario que sera alterado
     console.log(p.id);

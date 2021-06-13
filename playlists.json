@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "nome": "Pink Floyd",
+      "capa": "./imagens/pinkfloyd.png ",
+      "musicas": "./musicas/pink1",
+      "Usuario_id": " "
+    },
+    {
+        "id": 2,
+        "nome": "Iron_maiden",
+        "capa": "./imagens/ironmaiden.png ",
+        "musicas": "./musicas/iron.mp3",
+        "Usuario_id": " "
+      },
+      {
+        "id": 3,
+        "nome": "Queen",
+        "capa": "./imagens/queen.png ",
+        "musicas": "./musicas/queen.mp3",
+        "Usuario_id": " "
+      }
+   
+  ]
